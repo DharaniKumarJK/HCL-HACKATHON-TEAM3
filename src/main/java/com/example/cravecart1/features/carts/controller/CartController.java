@@ -1,11 +1,9 @@
 package com.example.cravecart1.features.carts.controller;
 
-import com.example.cravecart1.features.carts.dto.CartRequest;
-import com.example.cravecart1.features.carts.entity.Cart;
-import com.example.cravecart1.features.carts.service.CartService;
-import jakarta.validation.Valid;
 import java.util.List;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.cravecart1.features.carts.dto.CartRequest;
+import com.example.cravecart1.features.carts.entity.Cart;
+import com.example.cravecart1.features.carts.service.CartService;
+
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/carts")
+@PreAuthorize("hasRole('CUSTOMER')")
 public class CartController {
 
     private final CartService cartService;

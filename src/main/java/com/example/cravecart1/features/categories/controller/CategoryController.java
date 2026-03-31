@@ -1,11 +1,9 @@
 package com.example.cravecart1.features.categories.controller;
 
-import com.example.cravecart1.features.categories.dto.CategoryRequest;
-import com.example.cravecart1.features.categories.entity.Category;
-import com.example.cravecart1.features.categories.service.CategoryService;
-import jakarta.validation.Valid;
 import java.util.List;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.cravecart1.features.categories.dto.CategoryRequest;
+import com.example.cravecart1.features.categories.entity.Category;
+import com.example.cravecart1.features.categories.service.CategoryService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -28,27 +32,32 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public Category createCategory(@Valid @RequestBody CategoryRequest request) {
         return categoryService.createCategory(request);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     public List<Category> listCategories() {
         return categoryService.listCategories();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public Category getCategory(@PathVariable Long id) {
         return categoryService.getCategory(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Category updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
         return categoryService.updateCategory(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
     }
